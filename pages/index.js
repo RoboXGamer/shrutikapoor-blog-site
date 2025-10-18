@@ -1,11 +1,9 @@
-import Link from 'next/link';
 import { getPosts, getTalks } from '../utils/mdx-utils';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import LayoutFullWidth, {
   GradientBackground,
 } from '../components/LayoutFullWidth';
-import ArrowIcon from '../components/ArrowIcon';
 import { getGlobalData } from '../utils/global-data';
 import SEO from '../components/SEO';
 import FeaturedSection from '../components/FeaturedSection';
@@ -19,7 +17,7 @@ export default function Index({ posts, talks, globalData }) {
       <Header name={globalData.name} />
       <main className="mx-5">
         <FeaturedSection />
-        <FeaturedBlogs posts={posts.slice(0, 3)} />
+        <FeaturedBlogs posts={posts} />
         <FeaturedSpeaking talks={talks} />
       </main>
       <Footer copyrightText={globalData.footerText} />
@@ -36,10 +34,16 @@ export default function Index({ posts, talks, globalData }) {
 }
 
 export function getStaticProps() {
-  const posts = getPosts();
+  const allPosts = getPosts();
   const talks = getTalks();
 
   const globalData = getGlobalData();
+  const posts = allPosts.slice(0, 3).map((post) => {
+    return {
+      data: post.data,
+      filePath: post.filePath,
+    };
+  });
 
   return { props: { posts, talks, globalData } };
 }

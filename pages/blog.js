@@ -135,8 +135,15 @@ export default function Blog({ posts, globalData }) {
 }
 
 export function getStaticProps() {
-  const posts = getPosts();
+  const allPosts = getPosts();
   const globalData = getGlobalData();
+
+  const posts = allPosts.map((post) => {
+    return {
+      data: post.data,
+      filePath: post.filePath,
+    };
+  });
 
   return { props: { posts, globalData } };
 }
